@@ -435,6 +435,13 @@ func (s *Service) checkDiffAndPrepareUpdateSize(existingNodePool *containerpb.No
 		Name: s.scope.NodePoolFullName(),
 	}
 
+	// Sync spec.replicas with status.replicas if externally managed
+	if _, isExternallyManaged := s.scope.MachinePool.Annotations["cluster.x-k8s.io/replicas-managed-by"]; isExternallyManaged && s.scope.MachinePool.Status.Replicas != *s.scope.MachinePool.Spec.Replicas {
+		s.scope.MachinePool.Spec.Replicas = &s.scope.MachinePool.Status.Replicas
+		needUpdate = true
+		log.Info("Updated spec.replicas to match status.replicas due to external management")
+	}
+
 	replicas := *s.scope.MachinePool.Spec.Replicas
 	if shared.IsRegional(s.scope.Region()) {
 		replicas /= int32(len(existingNodePool.Locations))

@@ -25,7 +25,7 @@ COPY go.mod go.mod
 COPY go.sum go.sum
 # Cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
-RUN go mod download
+RUN go mod download -x
 
 # Copy the sources
 COPY ./ ./
@@ -38,7 +38,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} \
     -o manager .
 
 # Copy the controller-manager into a thin image
-FROM cgr.dev/chainguard/static:latest
+# FROM cgr.dev/chainguard/static:latest
+# change to alpine
+FROM alpine:3.11
 WORKDIR /
 COPY --from=builder /workspace/manager .
 USER nobody
