@@ -18,6 +18,9 @@ RUN go mod download
 # Copy the sources
 COPY ./ ./
 
+# Copy the necessary files to the container
+COPY hack/custom/change-version.sh hack/custom/change-version.sh
+
 # Ensure the script has execute permissions
 RUN chmod +x hack/custom/change-version.sh
 
