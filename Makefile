@@ -351,11 +351,18 @@ generate-manifests: $(CONTROLLER_GEN) ## Generate manifests e.g. CRD, RBAC etc.
 ## Docker
 ## --------------------------------------
 
+# Print docker build is going to start
+.PHONY: docker-build-start
+docker-build-start:
+	$(info Building docker image for $(CONTROLLER_IMG):$(TAG))
+
 .PHONY: docker-build
 docker-build: ## Build the docker image for controller-manager
 	docker build --pull --build-arg ARCH=$(ARCH) --build-arg LDFLAGS="$(LDFLAGS)" . -t $(CONTROLLER_IMG)-$(ARCH):$(TAG)
 	MANIFEST_IMG=$(CONTROLLER_IMG)-$(ARCH) MANIFEST_TAG=$(TAG) $(MAKE) set-manifest-image
 	$(MAKE) set-manifest-pull-policy
+
+# Debugging docker-build
 
 .PHONY: docker-push
 docker-push: ## Push the docker image
