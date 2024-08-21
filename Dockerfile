@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.21.9@sha256:ff6cfbd291c157a5b67e121b050e80a646a88b55de5c489a5c07acb9528a1feb as builder
+FROM golang:1.21.9 AS builder
 WORKDIR /workspace
 
 # Run this with docker build --build_arg $(go env GOPROXY) to override the goproxy
@@ -27,15 +27,27 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} \
 # Final stage with Alpine
 FROM alpine:3.18
 
-# Install necessary tools in the final image
+# Install dependencies
 RUN apk add --no-cache \
     git \
-    go \
     python3 \
     py3-pip \
     curl \
-    && pip3 install --upgrade pip \
-    && apk add --no-cache google-cloud-sdk
+    bash \
+    libc6-compat
+
+# Install Google Cloud SDK
+RUN curl -LO https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-428.0.0-linux-x86_64.tar.gz \
+    && tar -xzvf google-cloud-sdk-428.0.0-linux-x86_64.tar.gz \
+    && rm google-cloud-sdk-428.0.0-linux-x86_64.tar.gz \
+    && ./google-cloud-sdk/install.sh -q
+
+# Update PATH to include the Google Cloud SDK directory
+ENV PATH="/google-cloud-sdk/bin:${PATH}"
+
+# Install Python dependencies for gcloud
+RUN pip3 install --upgrade pip \
+    && pip3 install -U crcmod
 
 WORKDIR /
 COPY --from=builder /workspace/manager .
