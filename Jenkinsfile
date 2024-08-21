@@ -4,7 +4,7 @@ hose {
     EMAIL = 'clouds-integration@stratio.com'
     BUILDTOOL = 'make'
     VERSIONING_TYPE = 'stratioVersion-3-3'
-    UPSTREAM_VERSION = '1.6.0'
+    UPSTREAM_VERSION = '1.6.1'
     DEPLOYONPRS = true
     DEVTIMEOUT = 30
     ANCHORE_POLICY = "production"
