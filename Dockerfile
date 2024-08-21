@@ -14,6 +14,22 @@
 
 # Build the manager binary
 FROM golang:1.21.9@sha256:ff6cfbd291c157a5b67e121b050e80a646a88b55de5c489a5c07acb9528a1feb as builder
+
+# Install git and gcloud
+RUN apt-get update && apt-get install -y \
+    git \
+    python3 \
+    python3-pip \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    && pip3 install --upgrade pip \
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
+    && apt-get update && apt-get install -y google-cloud-sdk \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /workspace
 
 # Run this with docker build --build_arg $(go env GOPROXY) to override the goproxy
@@ -23,6 +39,7 @@ ENV GOPROXY=$goproxy
 # Copy the Go Modules manifests
 COPY go.mod go.mod
 COPY go.sum go.sum
+
 # Cache deps before building and copying source so that we don't need to re-download as much
 # and so that source changes don't invalidate our downloaded layer
 RUN  --mount=type=cache,target=/root/.local/share/golang \
@@ -42,18 +59,15 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     go build -a -trimpath -ldflags "${LDFLAGS} -extldflags '-static'" \
     -o manager .
 
-# Copy the controller-manager into a thin image
-# FROM cgr.dev/chainguard/static:latest
-# Use Alpine for the final image but install necessary tools
-FROM alpine:3.11
+# Use Alpine for the final image to minimize the size
+FROM alpine:3.18
 WORKDIR /
 
-# Install git, go, and gcloud
-RUN apk add --no-cache git go python3 py3-pip \
-    && pip install --upgrade pip \
-    && pip install google-cloud-sdk
-
+# Copy the manager binary from the builder stage
 COPY --from=builder /workspace/manager .
-USER nobody
-ENTRYPOINT ["/manager"]
 
+# Use a non-root user for security
+USER nobody
+
+# Set the entrypoint to the manager binary
+ENTRYPOINT ["/manager"]
