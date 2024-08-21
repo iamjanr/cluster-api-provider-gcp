@@ -44,9 +44,16 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 
 # Copy the controller-manager into a thin image
 # FROM cgr.dev/chainguard/static:latest
-# change to alpine
+# Use Alpine for the final image but install necessary tools
 FROM alpine:3.11
 WORKDIR /
+
+# Install git, go, and gcloud
+RUN apk add --no-cache git go python3 py3-pip \
+    && pip install --upgrade pip \
+    && pip install google-cloud-sdk
+
 COPY --from=builder /workspace/manager .
 USER nobody
 ENTRYPOINT ["/manager"]
+
