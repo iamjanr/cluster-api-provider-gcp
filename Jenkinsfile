@@ -14,6 +14,6 @@ hose {
     BUILDTOOL_MEMORY_LIMIT = "4096Mi"
 
     DEV = { config ->
-        doDocker(conf:config, dockerfile: 'Dockerfile', image:'cluster-api-provider-gcp')
+        doDocker(conf:config, dockerfile: 'Dockerfile', image:'gcr.io/clusterapi-369611/keos/cluster-api-gcp/cluster-api-gcp-controller:1.6.1-0.1-SNAPSHOT')
     }
 }
