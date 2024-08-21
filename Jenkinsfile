@@ -1,7 +1,7 @@
 @Library('libpipelines@master') _
 
 hose {
-    EMAIL = 'clouds-integration@stratio.com'
+    EMAIL = 'none@stratio.com'
     BUILDTOOL = 'make'
     VERSIONING_TYPE = 'stratioVersion-3-3'
     UPSTREAM_VERSION = '1.6.1'
