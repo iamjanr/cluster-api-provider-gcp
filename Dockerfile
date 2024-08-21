@@ -32,6 +32,9 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /workspace
 
+# Ensure go, git, and gcloud are installed
+RUN go version && git --version && gcloud --version
+
 # Run this with docker build --build_arg $(go env GOPROXY) to override the goproxy
 ARG goproxy=https://proxy.golang.org
 ENV GOPROXY=$goproxy
@@ -48,6 +51,9 @@ RUN  --mount=type=cache,target=/root/.local/share/golang \
 
 # Copy the sources
 COPY ./ ./
+
+# Ensure script has execution permissions
+RUN chmod +x hack/custom/change-version.sh
 
 # Build
 ARG ARCH
