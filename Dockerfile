@@ -17,6 +17,9 @@ RUN go mod download
 # Copy the sources
 COPY ./ ./
 
+# Ensure the script has execute permissions
+RUN chmod +x hack/custom/change-version.sh
+
 # Build the binary
 ARG ARCH
 ARG LDFLAGS
