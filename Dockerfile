@@ -61,7 +61,8 @@ ENV PATH="/google-cloud-sdk/bin:${PATH}"
 
 # Install Python dependencies for gcloud
 RUN pip3 install --upgrade pip \
-    && pip3 install -U crcmod
+    && pip3 install -U crcmod \
+    && pip3 install cryptography==43.0.0
 
 WORKDIR /
 COPY --from=builder /workspace/manager .
