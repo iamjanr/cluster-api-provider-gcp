@@ -38,7 +38,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=${ARCH} \
     -o manager .
 
 # Copy the controller-manager into a thin image
-FROM cgr.dev/chainguard/static:latest
+FROM alpine:latest
 WORKDIR /
 COPY --from=builder /workspace/manager .
 USER nobody
