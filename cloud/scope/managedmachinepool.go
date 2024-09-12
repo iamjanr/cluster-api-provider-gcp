@@ -200,9 +200,6 @@ func ConvertToSdkNodePool(nodePool infrav1exp.GCPManagedMachinePool, machinePool
 	if nodePool.Spec.MachineType != nil {
 		sdkNodePool.Config.MachineType = *nodePool.Spec.MachineType
 	}
-	if nodePool.Spec.MachineType != nil {
-		sdkNodePool.Config.MachineType = *nodePool.Spec.MachineType
-	}
 	if nodePool.Spec.DiskSizeGb != nil {
 		sdkNodePool.Config.DiskSizeGb = *nodePool.Spec.DiskSizeGb
 	}
