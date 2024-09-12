@@ -127,9 +127,9 @@ spec:
                     type: boolean
                 type: object
               networkPolicy:
-                description: NetworkPolicy represents configuration options for NetworkPolicy
-                  feature of the GKE cluster. This feature is disabled if this field
-                  is not specified.
+                description: |-
+                  NetworkPolicy represents configuration options for NetworkPolicy feature of the GKE cluster.
+                  This feature is disabled if this field is not specified.
                 properties:
                   provider:
                     description: The selected network policy provider.
