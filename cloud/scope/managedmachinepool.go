@@ -37,6 +37,8 @@ import (
 	clusterv1exp "sigs.k8s.io/cluster-api/exp/api/v1beta1"
 	"sigs.k8s.io/cluster-api/util/patch"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/log"
+	// import apierrors
 )
 
 // ManagedMachinePoolScopeParams defines the input parameters used to create a new Scope.
@@ -284,9 +286,45 @@ func ConvertToSdkNodePools(nodePools []infrav1exp.GCPManagedMachinePool, machine
 	return res
 }
 
-// SetReplicas sets the replicas count in status.
+// SetReplicas sets the replicas count in status and spec.
 func (s *ManagedMachinePoolScope) SetReplicas(replicas int32) {
+	// Update the status replicas
 	s.GCPManagedMachinePool.Status.Replicas = replicas
+	log.Log.Info("Updated GCPManagedMachinePool.Status.Replicas", "Replicas", s.GCPManagedMachinePool.Status.Replicas)
+
+	// Update MachinePool.Spec.Replicas to reflect the changes
+	if err := s.updateMachinePoolReplicas(context.TODO(), replicas); err != nil {
+		log.Log.Error(err, "Failed to update MachinePool.Spec.Replicas")
+	}
+
+}
+
+// updateMachinePoolReplicas updates the MachinePool replicas based on setReplicas.
+func (s *ManagedMachinePoolScope) updateMachinePoolReplicas(ctx context.Context, replicas int32) error {
+	log := log.FromContext(ctx)
+	// Fetch the corresponding MachinePool
+	machinePool := &clusterv1exp.MachinePool{}
+	if err := s.client.Get(ctx, client.ObjectKey{
+		Namespace: s.GCPManagedMachinePool.Namespace,
+		Name:      s.GCPManagedMachinePool.Name,
+	}, machinePool); err != nil {
+		log.Error(err, "Failed to fetch MachinePool")
+		return err
+	}
+
+	// Update MachinePool.Spec.Replicas to match GCPManagedMachinePool.Status.Replicas
+	if replicas != 0 {
+		machinePool.Spec.Replicas = &replicas
+		log.Info("Updated MachinePool.Spec.Replicas", "Replicas", replicas)
+
+		// Persist the changes
+		if err := s.client.Update(ctx, machinePool); err != nil {
+			log.Error(err, "Failed to update MachinePool Spec.Replicas")
+			return err
+		}
+	}
+
+	return nil
 }
 
 // NodePoolName returns the node pool name.
