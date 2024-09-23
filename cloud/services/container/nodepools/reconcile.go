@@ -307,11 +307,16 @@ func (s *Service) createNodePool(ctx context.Context, log *logr.Logger) error {
 }
 
 func (s *Service) updateNodePoolConfig(ctx context.Context, updateNodePoolRequest *containerpb.UpdateNodePoolRequest) error {
+	log := log.FromContext(ctx)
 	_, err := s.scope.ManagedMachinePoolClient().UpdateNodePool(ctx, updateNodePoolRequest)
 	if err != nil {
+		if strings.Contains(err.Error(), "CLUSTER_ALREADY_HAS_OPERATION") {
+			// Handle specific error without logging noise
+			log.Info("Cluster is currently undergoing another operation", "error", "Cluster is running incompatible operation")
+			return nil
+		}
 		return err
 	}
-
 	return nil
 }
 
@@ -370,7 +375,7 @@ func (s *Service) checkDiffAndPrepareUpdateConfig(existingNodePool *containerpb.
 		}
 	}
 	// Kubernetes taints
-	if !cmp.Equal(desiredNodePool.Config.GetTaints(), existingNodePool.Config.Taints) {
+	if !cmp.Equal(desiredNodePool.Config.GetTaints(), existingNodePool.Config.Taints, cmpopts.IgnoreUnexported(containerpb.NodeTaint{})) {
 		needUpdate = true
 		updateNodePoolRequest.Taints = &containerpb.NodeTaints{
 			Taints: desiredNodePool.Config.GetTaints(),
