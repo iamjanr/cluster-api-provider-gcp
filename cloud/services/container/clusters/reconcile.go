@@ -265,6 +265,22 @@ func (s *Service) createCluster(ctx context.Context, log *logr.Logger) error {
 	if s.scope.GCPManagedControlPlane.Spec.ControlPlaneVersion != nil {
 		cluster.InitialClusterVersion = convertToSdkMasterVersion(*s.scope.GCPManagedControlPlane.Spec.ControlPlaneVersion)
 	}
+	fmt.Println("Checking if the cluster is private")
+    // Print GCPManagedControlPlane information
+    fmt.Println("GCPManagedControlPlane: ", s.scope.GCPManagedControlPlane)
+    if s.scope.GCPManagedControlPlane.Spec.ClusterNetwork != nil {
+        cn := s.scope.GCPManagedControlPlane.Spec.ClusterNetwork
+        // Debug print the private cluster information enabled
+        fmt.Println("TESTING - Private Cluster Enabled: ", cn.PrivateCluster.EnablePrivateNodes)
+        // Debug print the private cluster information control plane cidr block
+        fmt.Println("TESTING - Control Plane CIDR Block: ", cn.PrivateCluster.ControlPlaneCidrBlock)
+        if cn.PrivateCluster != nil {
+            cluster.PrivateClusterConfig = &containerpb.PrivateClusterConfig{}
+            cluster.PrivateClusterConfig.EnablePrivateNodes = cn.PrivateCluster.EnablePrivateNodes
+            cluster.PrivateClusterConfig.MasterIpv4CidrBlock = cn.PrivateCluster.ControlPlaneCidrBlock
+        }
+    }
+	// If the cluster is autopilot, we don't need to specify node pools.
 	if !s.scope.IsAutopilotCluster() {
 		cluster.NodePools = scope.ConvertToSdkNodePools(nodePools, machinePools, isRegional, cluster.Name)
 	}
