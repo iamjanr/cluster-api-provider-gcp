@@ -2084,6 +2084,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
+  labels:
+    cluster.x-k8s.io/provider: infrastructure-gcp
+    cluster.x-k8s.io/v1beta1: v1beta1
   name: gcpmanagedcontrolplanes.infrastructure.cluster.x-k8s.io
 spec:
   group: infrastructure.cluster.x-k8s.io
