@@ -2084,9 +2084,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  labels:
-    cluster.x-k8s.io/provider: infrastructure-gcp
-    cluster.x-k8s.io/v1beta1: v1beta1
   name: gcpmanagedcontrolplanes.infrastructure.cluster.x-k8s.io
 spec:
   group: infrastructure.cluster.x-k8s.io
@@ -2151,6 +2148,26 @@ spec:
                   If you don't specify a name then a default name will be created
                   based on the namespace and name of the managed control plane.
                 type: string
+              clusterNetwork:
+                description: ClusterNetwork define the cluster network.
+                properties:
+                  privateCluster:
+                    description: PrivateCluster defines the private cluster spec.
+                    properties:
+                      controlPlaneCidrBlock:
+                        description: |-
+                          ControlPlaneCidrBlock is the IP range in CIDR notation to use for the hosted master network. This range must not
+                          overlap with any other ranges in use within the cluster's network. Honored when enabled is true.
+                        type: string
+                      enablePrivateNodes:
+                        description: |-
+                          EnablePrivateNodes: Whether nodes have internal IP
+                          addresses only. If enabled, all nodes are given only RFC
+                          1918 private addresses and communicate with the master via
+                          private networking.
+                        type: boolean
+                    type: object
+                type: object
               controlPlaneVersion:
                 description: |-
                   ControlPlaneVersion represents the control plane version of the GKE cluster.
@@ -2210,9 +2227,9 @@ spec:
                     type: boolean
                 type: object
               networkPolicy:
-                description: NetworkPolicy represents configuration options for NetworkPolicy
-                  feature of the GKE cluster. This feature is disabled if this field
-                  is not specified.
+                description: |-
+                  NetworkPolicy represents configuration options for NetworkPolicy feature of the GKE cluster.
+                  This feature is disabled if this field is not specified.
                 properties:
                   provider:
                     description: The selected network policy provider.
@@ -2782,6 +2799,8 @@ rules:
   - get
   - list
   - watch
+  - update
+  - patch
 - apiGroups:
   - cluster.x-k8s.io
   resources:
@@ -2994,6 +3013,7 @@ spec:
         - --feature-gates=GKE=${EXP_CAPG_GKE:=false}
         - --diagnostics-address=${CAPG_DIAGNOSTICS_ADDRESS:=:8443}
         - --insecure-diagnostics=${CAPG_INSECURE_DIAGNOSTICS:=false}
+        - --sync-period=2m
         - --v=${CAPG_LOGLEVEL:=0}
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
