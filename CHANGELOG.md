@@ -2,6 +2,7 @@
 
 ## 1.6.1-0.2.0 (upcoming)
 
+* Add GKE Private cluster support
 * Fix autoscaling issues
 * First approach to manage taints addition, update and deletion on GKE
 * After creating a GKE cluster, it takes ~20 minutes for its status to be READY

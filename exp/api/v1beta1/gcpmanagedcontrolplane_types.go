@@ -27,6 +27,26 @@ const (
 	ManagedControlPlaneFinalizer = "gcpmanagedcontrolplane.infrastructure.cluster.x-k8s.io"
 )
 
+type PrivateCluster struct {
+	// EnablePrivateNodes: Whether nodes have internal IP
+	// addresses only. If enabled, all nodes are given only RFC
+	// 1918 private addresses and communicate with the master via
+	// private networking.
+	// +optional
+	EnablePrivateNodes bool `json:"enablePrivateNodes,omitempty"`
+	// ControlPlaneCidrBlock is the IP range in CIDR notation to use for the hosted master network. This range must not
+	// overlap with any other ranges in use within the cluster's network. Honored when enabled is true.
+	// +optional
+	ControlPlaneCidrBlock string `json:"controlPlaneCidrBlock,omitempty"`
+}
+
+// ClusterNetwork define the cluster network.
+type ClusterNetwork struct {
+	// PrivateCluster defines the private cluster spec.
+	// +optional
+	PrivateCluster *PrivateCluster `json:"privateCluster,omitempty"`
+}
+
 // GCPManagedControlPlaneSpec defines the desired state of GCPManagedControlPlane.
 type GCPManagedControlPlaneSpec struct {
 	// ClusterName allows you to specify the name of the GKE cluster.
@@ -34,6 +54,9 @@ type GCPManagedControlPlaneSpec struct {
 	// based on the namespace and name of the managed control plane.
 	// +optional
 	ClusterName string `json:"clusterName,omitempty"`
+	// ClusterNetwork define the cluster network.
+	// +optional
+	ClusterNetwork *ClusterNetwork `json:"clusterNetwork,omitempty"`
 	// Project is the name of the project to deploy the cluster to.
 	Project string `json:"project"`
 	// Location represents the location (region or zone) in which the GKE cluster
