@@ -313,17 +313,23 @@ func (s *ManagedMachinePoolScope) updateMachinePoolReplicas(ctx context.Context,
 	}
 
 	// Update MachinePool.Spec.Replicas to match GCPManagedMachinePool.Status.Replicas
-	if replicas != 0 {
-		machinePool.Spec.Replicas = &replicas
-		log.Info("Updated MachinePool.Spec.Replicas", "Replicas", replicas)
+	machinePool.Spec.Replicas = &replicas
+	log.Info("Updated MachinePool.Spec.Replicas", "Replicas", replicas)
+	// Persist the changes
+	if err := s.client.Update(ctx, machinePool); err != nil {
+		log.Error(err, "Failed to update MachinePool Spec.Replicas")
+		return err
+	}
 
-		// Persist the changes
-		if err := s.client.Update(ctx, machinePool); err != nil {
-			log.Error(err, "Failed to update MachinePool Spec.Replicas")
+	if *machinePool.Spec.Replicas == 0 && machinePool.Status.Replicas == 0 {
+		// Update the status replicas to replicas
+		machinePool.Status.Replicas = replicas
+		log.Info("Updated MachinePool Status replicas", "MachinePool Name", machinePool.Name, "Replicas", replicas)
+		if err := s.client.Status().Update(ctx, machinePool); err != nil {
+			log.Error(err, "Failed to update MachinePool Status.Replicas")
 			return err
 		}
 	}
-
 	return nil
 }
 
