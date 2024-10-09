@@ -8,7 +8,7 @@ hose {
     DEPLOYONPRS = true
     DEVTIMEOUT = 30
     ANCHORE_POLICY = "production"
-    GRYPE_TEST = false
+    GRYPE_TEST = true
 
     BUILDTOOL_MEMORY_REQUEST = "1024Mi"
     BUILDTOOL_MEMORY_LIMIT = "4096Mi"
