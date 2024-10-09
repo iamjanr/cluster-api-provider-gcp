@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.6.1-0.2.0 (upcoming)
+## 1.6.1-0.2.0 (2024-10-09)
 
 * Add GKE Private cluster support
 * Fix autoscaling issues
