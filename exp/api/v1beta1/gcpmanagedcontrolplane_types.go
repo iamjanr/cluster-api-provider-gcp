@@ -28,6 +28,10 @@ const (
 )
 
 type PrivateCluster struct {
+	// EnablePrivateEndpoint: Whether the master's internal IP
+	// address is used as the cluster endpoint.
+	// +optional
+	EnablePrivateEndpoint bool `json:"enablePrivateEndpoint,omitempty"`
 	// EnablePrivateNodes: Whether nodes have internal IP
 	// addresses only. If enabled, all nodes are given only RFC
 	// 1918 private addresses and communicate with the master via

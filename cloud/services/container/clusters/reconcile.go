@@ -269,6 +269,7 @@ func (s *Service) createCluster(ctx context.Context, log *logr.Logger) error {
 		cn := s.scope.GCPManagedControlPlane.Spec.ClusterNetwork
 		if cn.PrivateCluster != nil {
 			cluster.PrivateClusterConfig = &containerpb.PrivateClusterConfig{}
+			cluster.PrivateClusterConfig.EnablePrivateEndpoint = cn.PrivateCluster.EnablePrivateEndpoint
 			cluster.PrivateClusterConfig.EnablePrivateNodes = cn.PrivateCluster.EnablePrivateNodes
 			cluster.PrivateClusterConfig.MasterIpv4CidrBlock = cn.PrivateCluster.ControlPlaneCidrBlock
 		}
