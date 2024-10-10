@@ -8,6 +8,8 @@
 
 ### Branched to branch-1.6.1-0.2 (2024-10-09)
 
+## 1.6.1-0.2.0 (2024-10-09)
+
 * Add GKE Private cluster support
 * Fix autoscaling issues
 * First approach to manage taints addition, update and deletion on GKE
