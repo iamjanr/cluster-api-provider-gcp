@@ -79,6 +79,11 @@ spec:
                           ControlPlaneCidrBlock is the IP range in CIDR notation to use for the hosted master network. This range must not
                           overlap with any other ranges in use within the cluster's network. Honored when enabled is true.
                         type: string
+                      enablePrivateEndpoint:
+                        description: |-
+                          EnablePrivateEndpoint: Whether the master's internal IP
+                          address is used as the cluster endpoint.
+                        type: boolean
                       enablePrivateNodes:
                         description: |-
                           EnablePrivateNodes: Whether nodes have internal IP

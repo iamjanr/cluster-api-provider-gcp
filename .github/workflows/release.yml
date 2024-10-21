@@ -1,0 +1,60 @@
+name: Build and Upload Release Assets
+
+on:
+  release:
+    types: [created]
+
+# Add permissions to GITHUB_TOKEN auto-generated to write to the repository
+permissions:
+  contents: write  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Install dependencies if needed
+    #    (e.g. install a compiler, Kustomize, etc.)
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y make 
+
+    - name: Install Kustomize
+      run: |
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+        sudo mv kustomize /usr/local/bin/
+
+    # 3. Run Makefile to generate manifests
+    - name: Run Makefile to generate infrastructure-components.yaml
+      run: make release-manifests
+
+    # 4. Run Makefile to generate metadata.yaml
+    - name: Run Makefile to generate metadata.yaml
+      run: make release-metadata
+
+    # 5. Upload infrastructure-components.yaml as a release asset
+    - name: Upload infrastructure-components.yaml
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./out/infrastructure-components.yaml
+        asset_name: infrastructure-components.yaml
+        asset_content_type: application/x-yaml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Usar el token generado automáticamente
+
+    # 6. Upload metadata.yaml as a release asset
+    - name: Upload metadata.yaml
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./out/metadata.yaml 
+        asset_name: metadata.yaml
+        asset_content_type: application/x-yaml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

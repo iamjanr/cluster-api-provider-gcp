@@ -2162,6 +2162,11 @@ spec:
                           ControlPlaneCidrBlock is the IP range in CIDR notation to use for the hosted master network. This range must not
                           overlap with any other ranges in use within the cluster's network. Honored when enabled is true.
                         type: string
+                      enablePrivateEndpoint:
+                        description: |-
+                          EnablePrivateEndpoint: Whether the master's internal IP
+                          address is used as the cluster endpoint.
+                        type: boolean
                       enablePrivateNodes:
                         description: |-
                           EnablePrivateNodes: Whether nodes have internal IP
@@ -2801,9 +2806,9 @@ rules:
   verbs:
   - get
   - list
-  - watch
-  - update
   - patch
+  - update
+  - watch
 - apiGroups:
   - cluster.x-k8s.io
   resources:
@@ -3016,7 +3021,6 @@ spec:
         - --feature-gates=GKE=${EXP_CAPG_GKE:=false}
         - --diagnostics-address=${CAPG_DIAGNOSTICS_ADDRESS:=:8443}
         - --insecure-diagnostics=${CAPG_INSECURE_DIAGNOSTICS:=false}
-        - --sync-period=2m
         - --v=${CAPG_LOGLEVEL:=0}
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -3033,7 +3037,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.io/clusterapi-369611/cluster-api-gcp-controller-amd64:1.6.1-SNAPSHOT
+        image: gcr.io/k8s-staging-cluster-api-gcp/cluster-api-gcp-controller:e2e
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:

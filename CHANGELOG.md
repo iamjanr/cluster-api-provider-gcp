@@ -6,12 +6,13 @@
 
 ## Previous development
 
-### Branched to branch-1.6.1-0.2 (2024-10-09)
+## 1.6.1-0.2.0 (2024-10-11)
 
-* Add GKE Private cluster support
-* Fix autoscaling issues
-* First approach to manage taints addition, update and deletion on GKE
-* After creating a GKE cluster, it takes ~20 minutes for its status to be READY
+* [PLT-806] Add GKE Private cluster support
+* [PLT-563] Fix autoscaling issues
+* [PLT-326] First approach to manage taints addition, update and deletion on GKE
+* [PLT-327] After creating a GKE cluster, it takes ~20 minutes for its status to be READY
+* [PLT-911] Disable external endpoint
 
 
 
