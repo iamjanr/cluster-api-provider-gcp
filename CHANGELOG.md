@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.6.1-0.2.0 (2024-10-11)
+## 1.6.1-0.2.0 (2024-10-21)
 
 * [PLT-806] Add GKE Private cluster support
 * [PLT-563] Fix autoscaling issues
