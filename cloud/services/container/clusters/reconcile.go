@@ -274,6 +274,32 @@ func (s *Service) createCluster(ctx context.Context, log *logr.Logger) error {
 			cluster.PrivateClusterConfig.MasterIpv4CidrBlock = cn.PrivateCluster.ControlPlaneCidrBlock
 		}
 	}
+	if s.scope.GCPManagedControlPlane.Spec.MonitoringConfig != nil {
+		cn := s.scope.GCPManagedControlPlane.Spec.MonitoringConfig
+		cluster.MonitoringConfig = &containerpb.MonitoringConfig{}
+		if cluster.MonitoringConfig.ManagedPrometheusConfig == nil {
+			cluster.MonitoringConfig.ManagedPrometheusConfig = &containerpb.ManagedPrometheusConfig{}
+		}
+		cluster.MonitoringConfig.ManagedPrometheusConfig.Enabled = cn.EnableManagedPrometheus
+	}
+	if s.scope.GCPManagedControlPlane.Spec.LoggingConfig != nil {
+		cn := s.scope.GCPManagedControlPlane.Spec.LoggingConfig
+		cluster.LoggingConfig = &containerpb.LoggingConfig{}
+		if cluster.LoggingConfig.ComponentConfig == nil {
+			cluster.LoggingConfig.ComponentConfig = &containerpb.LoggingComponentConfig{}
+		}
+		if cn.SystemComponents {
+			cluster.LoggingConfig.ComponentConfig.EnableComponents = append(cluster.LoggingConfig.ComponentConfig.EnableComponents, containerpb.LoggingComponentConfig_SYSTEM_COMPONENTS)
+		}
+		if cn.Workloads {
+			cluster.LoggingConfig.ComponentConfig.EnableComponents = append(cluster.LoggingConfig.ComponentConfig.EnableComponents, containerpb.LoggingComponentConfig_WORKLOADS)
+		}
+		// If neither SystemComponents nor Workloads is true, logging is disabled
+		if !cn.SystemComponents && !cn.Workloads {
+			cluster.LoggingConfig.ComponentConfig.EnableComponents = nil
+		}
+	}
+
 	// If the cluster is autopilot, we don't need to specify node pools.
 	if !s.scope.IsAutopilotCluster() {
 		cluster.NodePools = scope.ConvertToSdkNodePools(nodePools, machinePools, isRegional, cluster.Name)
