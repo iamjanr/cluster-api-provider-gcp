@@ -8,6 +8,7 @@
 
 ## 1.6.1-0.2.0 (2024-10-11)
 
+* [PLT-965] Disable managed Monitoring and Logging
 * [PLT-806] Add GKE Private cluster support
 * [PLT-563] Fix autoscaling issues
 * [PLT-326] First approach to manage taints addition, update and deletion on GKE
