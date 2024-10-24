@@ -123,6 +123,16 @@ spec:
                   Location represents the location (region or zone) in which the GKE cluster
                   will be created.
                 type: string
+              loggingConfig:
+                description: LoggingConfig defines the logging on Cluster.
+                properties:
+                  systemComponents:
+                    description: SystemComponents enables the system component logging.
+                    type: boolean
+                  workloads:
+                    description: Workloads enables the Workloads logging.
+                    type: boolean
+                type: object
               master_authorized_networks_config:
                 description: |-
                   MasterAuthorizedNetworksConfig represents configuration options for master authorized networks feature of the GKE cluster.
@@ -149,6 +159,14 @@ spec:
                   gcp_public_cidrs_access_enabled:
                     description: Whether master is accessible via Google Compute Engine
                       Public IP addresses.
+                    type: boolean
+                type: object
+              monitoringConfig:
+                description: MonitoringConfig defines the monitoring on Cluster.
+                properties:
+                  enableManagedPrometheus:
+                    description: EnableManagedPrometheus Enable Google Cloud Managed
+                      Service for Prometheus in the cluster.
                     type: boolean
                 type: object
               networkPolicy:

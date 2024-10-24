@@ -51,6 +51,23 @@ type ClusterNetwork struct {
 	PrivateCluster *PrivateCluster `json:"privateCluster,omitempty"`
 }
 
+// LoggingConfig defines the logging on Cluster.
+type LoggingConfig struct {
+	// SystemComponents enables the system component logging.
+	// +optional
+	SystemComponents bool `json:"systemComponents,omitempty"`
+	// Workloads enables the Workloads logging.
+	// +optional
+	Workloads bool `json:"workloads,omitempty"`
+}
+
+// MonitoringConfig defines the monitoring on Cluster.
+type MonitoringConfig struct {
+	// EnableManagedPrometheus Enable Google Cloud Managed Service for Prometheus in the cluster.
+	// +optional
+	EnableManagedPrometheus bool `json:"enableManagedPrometheus,omitempty"`
+}
+
 // GCPManagedControlPlaneSpec defines the desired state of GCPManagedControlPlane.
 type GCPManagedControlPlaneSpec struct {
 	// ClusterName allows you to specify the name of the GKE cluster.
@@ -61,6 +78,12 @@ type GCPManagedControlPlaneSpec struct {
 	// ClusterNetwork define the cluster network.
 	// +optional
 	ClusterNetwork *ClusterNetwork `json:"clusterNetwork,omitempty"`
+	// LoggingConfig defines the logging on Cluster.
+	// +optional
+	LoggingConfig *LoggingConfig `json:"loggingConfig,omitempty"`
+	// MonitoringConfig defines the monitoring on Cluster.
+	// +optional
+	MonitoringConfig *MonitoringConfig `json:"monitoringConfig,omitempty"`
 	// Project is the name of the project to deploy the cluster to.
 	Project string `json:"project"`
 	// Location represents the location (region or zone) in which the GKE cluster
