@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.6.1-0.3.1 (2025-02-17)
+## 1.6.1-0.3.1 (2025-02-26)
 
 * [PLT-1496] Use extended release channel in GKE by default
 
