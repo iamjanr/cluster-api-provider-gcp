@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1-0.3.3 (upcoming)
+
+* [PLT-1548] [GKE] Activar Workload Identity
+
 ## 1.6.1-0.3.1 (2025-02-26)
 
 * [PLT-1496] Use extended release channel in GKE by default
