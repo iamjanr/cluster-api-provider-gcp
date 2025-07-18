@@ -68,6 +68,22 @@ type MonitoringConfig struct {
 	EnableManagedPrometheus bool `json:"enableManagedPrometheus,omitempty"`
 }
 
+// WorkloadIdentityConfig allows workloads in your GKE clusters to impersonate Identity and Access Management (IAM)
+// service accounts to access Google Cloud services.
+type WorkloadIdentityConfig struct {
+	// WorkloadPool is the workload pool to attach all Kubernetes service accounts to Google Cloud services.
+	// Only relevant when enabled is true
+	// +kubebuilder:validation:Required
+	WorkloadPool string `json:"workloadPool,omitempty"`
+}
+
+type ClusterSecurity struct {
+	// WorkloadIdentityConfig allows workloads in your GKE clusters to impersonate Identity and Access Management (IAM)
+	// service accounts to access Google Cloud services
+	// +optional
+	WorkloadIdentityConfig *WorkloadIdentityConfig `json:"workloadIdentityConfig,omitempty"`
+}
+
 // GCPManagedControlPlaneSpec defines the desired state of GCPManagedControlPlane.
 type GCPManagedControlPlaneSpec struct {
 	// ClusterName allows you to specify the name of the GKE cluster.
@@ -78,6 +94,9 @@ type GCPManagedControlPlaneSpec struct {
 	// ClusterNetwork define the cluster network.
 	// +optional
 	ClusterNetwork *ClusterNetwork `json:"clusterNetwork,omitempty"`
+	// ClusterSecurity defines the cluster security.
+	// +optional
+	ClusterSecurity *ClusterSecurity `json:"clusterSecurity,omitempty"`
 	// LoggingConfig defines the logging on Cluster.
 	// +optional
 	LoggingConfig *LoggingConfig `json:"loggingConfig,omitempty"`

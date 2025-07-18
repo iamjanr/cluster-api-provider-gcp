@@ -101,6 +101,23 @@ spec:
                         type: boolean
                     type: object
                 type: object
+              clusterSecurity:
+                description: ClusterSecurity defines the cluster security.
+                properties:
+                  workloadIdentityConfig:
+                    description: |-
+                      WorkloadIdentityConfig allows workloads in your GKE clusters to impersonate Identity and Access Management (IAM)
+                      service accounts to access Google Cloud services
+                    properties:
+                      workloadPool:
+                        description: |-
+                          WorkloadPool is the workload pool to attach all Kubernetes service accounts to Google Cloud services.
+                          Only relevant when enabled is true
+                        type: string
+                    required:
+                    - workloadPool
+                    type: object
+                type: object
               controlPlaneVersion:
                 description: |-
                   ControlPlaneVersion represents the control plane version of the GKE cluster.

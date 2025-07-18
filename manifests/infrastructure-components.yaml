@@ -10,7 +10,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: capg-system/capg-serving-cert
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -150,11 +150,9 @@ spec:
                       in "auto" mode. When set to false, the VPC network is created in
                       "custom" mode.
 
-
                       An auto mode VPC network starts with one subnet per region. Each
                       subnet has a predetermined range as described in Auto mode VPC
                       network IP ranges.
-
 
                       Defaults to true.
                     type: boolean
@@ -204,7 +202,6 @@ spec:
                             Purpose: The purpose of the resource.
                             If unspecified, the purpose defaults to PRIVATE_RFC_1918.
                             The enableFlowLogs field isn't supported with the purpose field set to INTERNAL_HTTPS_LOAD_BALANCER.
-
 
                             Possible values:
                               "INTERNAL_HTTPS_LOAD_BALANCER" - Subnet reserved for Internal
@@ -385,7 +382,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: capg-system/capg-serving-cert
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -542,11 +539,9 @@ spec:
                               in "auto" mode. When set to false, the VPC network is created in
                               "custom" mode.
 
-
                               An auto mode VPC network starts with one subnet per region. Each
                               subnet has a predetermined range as described in Auto mode VPC
                               network IP ranges.
-
 
                               Defaults to true.
                             type: boolean
@@ -596,7 +591,6 @@ spec:
                                     Purpose: The purpose of the resource.
                                     If unspecified, the purpose defaults to PRIVATE_RFC_1918.
                                     The enableFlowLogs field isn't supported with the purpose field set to INTERNAL_HTTPS_LOAD_BALANCER.
-
 
                                     Possible values:
                                       "INTERNAL_HTTPS_LOAD_BALANCER" - Subnet reserved for Internal
@@ -702,7 +696,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: capg-system/capg-serving-cert
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -824,6 +818,8 @@ spec:
                               maxLength: 160
                               pattern: projects\/[-_[A-Za-z0-9]+\/locations\/[-_[A-Za-z0-9]+\/keyRings\/[-_[A-Za-z0-9]+\/cryptoKeys\/[-_[A-Za-z0-9]+
                               type: string
+                          required:
+                          - kmsKeyName
                           type: object
                         suppliedKey:
                           description: SuppliedKey provides the key used to create
@@ -1046,6 +1042,8 @@ spec:
                         maxLength: 160
                         pattern: projects\/[-_[A-Za-z0-9]+\/locations\/[-_[A-Za-z0-9]+\/keyRings\/[-_[A-Za-z0-9]+\/cryptoKeys\/[-_[A-Za-z0-9]+
                         type: string
+                    required:
+                    - kmsKeyName
                     type: object
                   suppliedKey:
                     description: SuppliedKey provides the key used to create or manage
@@ -1161,7 +1159,6 @@ spec:
                   reconciling the Machine and will contain a more verbose string suitable
                   for logging and human consumption.
 
-
                   This field should not be set for transitive errors that a controller
                   faces that are expected to be fixed automatically over
                   time (like service outages), but instead indicate that something is
@@ -1170,7 +1167,6 @@ spec:
                   of terminal errors would be invalid combinations of settings in the
                   spec, values that are unsupported by the controller, or the
                   responsible controller itself being critically misconfigured.
-
 
                   Any transient errors that occur during the reconciliation of Machines
                   can be added as events to the Machine object and/or logged in the
@@ -1182,7 +1178,6 @@ spec:
                   reconciling the Machine and will contain a succinct value suitable
                   for machine interpretation.
 
-
                   This field should not be set for transitive errors that a controller
                   faces that are expected to be fixed automatically over
                   time (like service outages), but instead indicate that something is
@@ -1191,7 +1186,6 @@ spec:
                   of terminal errors would be invalid combinations of settings in the
                   spec, values that are unsupported by the controller, or the
                   responsible controller itself being critically misconfigured.
-
 
                   Any transient errors that occur during the reconciliation of Machines
                   can be added as events to the Machine object and/or logged in the
@@ -1216,7 +1210,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: capg-system/capg-serving-cert
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -1351,6 +1345,8 @@ spec:
                                       maxLength: 160
                                       pattern: projects\/[-_[A-Za-z0-9]+\/locations\/[-_[A-Za-z0-9]+\/keyRings\/[-_[A-Za-z0-9]+\/cryptoKeys\/[-_[A-Za-z0-9]+
                                       type: string
+                                  required:
+                                  - kmsKeyName
                                   type: object
                                 suppliedKey:
                                   description: SuppliedKey provides the key used to
@@ -1576,6 +1572,8 @@ spec:
                                 maxLength: 160
                                 pattern: projects\/[-_[A-Za-z0-9]+\/locations\/[-_[A-Za-z0-9]+\/keyRings\/[-_[A-Za-z0-9]+\/cryptoKeys\/[-_[A-Za-z0-9]+
                                 type: string
+                            required:
+                            - kmsKeyName
                             type: object
                           suppliedKey:
                             description: SuppliedKey provides the key used to create
@@ -1680,7 +1678,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -1804,11 +1802,9 @@ spec:
                       in "auto" mode. When set to false, the VPC network is created in
                       "custom" mode.
 
-
                       An auto mode VPC network starts with one subnet per region. Each
                       subnet has a predetermined range as described in Auto mode VPC
                       network IP ranges.
-
 
                       Defaults to true.
                     type: boolean
@@ -1858,7 +1854,6 @@ spec:
                             Purpose: The purpose of the resource.
                             If unspecified, the purpose defaults to PRIVATE_RFC_1918.
                             The enableFlowLogs field isn't supported with the purpose field set to INTERNAL_HTTPS_LOAD_BALANCER.
-
 
                             Possible values:
                               "INTERNAL_HTTPS_LOAD_BALANCER" - Subnet reserved for Internal
@@ -2083,7 +2078,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -2145,6 +2140,14 @@ spec:
           spec:
             description: GCPManagedControlPlaneSpec defines the desired state of GCPManagedControlPlane.
             properties:
+              clusterIpv4Cidr:
+                description: |-
+                  ClusterIpv4Cidr is the IP address range of the container pods in the GKE cluster, in
+                  [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
+                  notation (e.g. `10.96.0.0/14`).
+                  If not specified then one will be automatically chosen.
+                  If this field is specified then IPAllocationPolicy.ClusterIpv4CidrBlock should be left blank.
+                type: string
               clusterName:
                 description: |-
                   ClusterName allows you to specify the name of the GKE cluster.
@@ -2176,6 +2179,21 @@ spec:
                         type: boolean
                     type: object
                 type: object
+              clusterSecurity:
+                description: ClusterSecurity defines the cluster security.
+                properties:
+                  workloadIdentityConfig:
+                    description: |-
+                      WorkloadIdentityConfig allows workloads in your GKE clusters to impersonate Identity and Access Management (IAM)
+                      service accounts to access Google Cloud services
+                    properties:
+                      workloadPool:
+                        description: |-
+                          WorkloadPool is the workload pool to attach all Kubernetes service accounts to Google Cloud services.
+                          Only relevant when enabled is true
+                        type: string
+                    type: object
+                type: object
               controlPlaneVersion:
                 description: |-
                   ControlPlaneVersion represents the control plane version of the GKE cluster.
@@ -2201,11 +2219,57 @@ spec:
                 - host
                 - port
                 type: object
+              ipAllocationPolicy:
+                description: |-
+                  IPAllocationPolicy represents configuration options for GKE cluster IP allocation.
+                  If not specified then GKE default values will be used.
+                properties:
+                  clusterIpv4CidrBlock:
+                    description: |-
+                      ClusterIpv4CidrBlock represents the IP address range for the GKE cluster pod IPs. If this field is set, then
+                      GCPManagedControlPlaneSpec.ClusterIpv4Cidr must be left blank.
+                      This field is only applicable when use_ip_aliases is set to true.
+                      If not specified the range will be chosen with the default size.
+                    type: string
+                  clusterSecondaryRangeName:
+                    description: |-
+                      ClusterSecondaryRangeName represents the name of the secondary range to be used for the GKE cluster CIDR block.
+                      The range will be used for pod IP addresses and must be an existing secondary range associated with the cluster subnetwork.
+                      This field is only applicable when use_ip_aliases is set to true.
+                    type: string
+                  servicesIpv4CidrBlock:
+                    description: |-
+                      ServicesIpv4CidrBlock represents the IP address range for services IPs in the GKE cluster.
+                      This field is only applicable when use_ip_aliases is set to true.
+                      If not specified the range will be chosen with the default size.
+                    type: string
+                  servicesSecondaryRangeName:
+                    description: |-
+                      ServicesSecondaryRangeName represents the name of the secondary range to be used for the services CIDR block.
+                      The range will be used for service ClusterIPs and must be an existing secondary range associated with the cluster subnetwork.
+                      This field is only applicable when use_ip_aliases is set to true.
+                    type: string
+                  useIPAliases:
+                    description: |-
+                      UseIPAliases represents whether alias IPs will be used for pod IPs in the cluster.
+                      If unspecified will default to false.
+                    type: boolean
+                type: object
               location:
                 description: |-
                   Location represents the location (region or zone) in which the GKE cluster
                   will be created.
                 type: string
+              loggingConfig:
+                description: LoggingConfig defines the logging on Cluster.
+                properties:
+                  systemComponents:
+                    description: SystemComponents enables the system component logging.
+                    type: boolean
+                  workloads:
+                    description: Workloads enables the Workloads logging.
+                    type: boolean
+                type: object
               master_authorized_networks_config:
                 description: |-
                   MasterAuthorizedNetworksConfig represents configuration options for master authorized networks feature of the GKE cluster.
@@ -2234,6 +2298,14 @@ spec:
                       Public IP addresses.
                     type: boolean
                 type: object
+              monitoringConfig:
+                description: MonitoringConfig defines the monitoring on Cluster.
+                properties:
+                  enableManagedPrometheus:
+                    description: EnableManagedPrometheus Enable Google Cloud Managed
+                      Service for Prometheus in the cluster.
+                    type: boolean
+                type: object
               networkPolicy:
                 description: |-
                   NetworkPolicy represents configuration options for NetworkPolicy feature of the GKE cluster.
@@ -2256,6 +2328,7 @@ spec:
                 - rapid
                 - regular
                 - stable
+                - extended
                 type: string
             required:
             - location
@@ -2339,7 +2412,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.16.4
   labels:
     cluster.x-k8s.io/provider: infrastructure-gcp
     cluster.x-k8s.io/v1beta1: v1beta1
@@ -2397,6 +2470,10 @@ spec:
                   AdditionalLabels is an optional set of tags to add to GCP resources managed by the GCP provider, in addition to the
                   ones added by default.
                 type: object
+              bootDiskKmsKey:
+                description: BootDiskKmsKey is the name of the key used to encrypt
+                  the boot disk.
+                type: string
               diskSizeGB:
                 description: |-
                   DiskSizeGB is size of the disk attached to each node,
@@ -2794,6 +2871,8 @@ rules:
   resources:
   - clusters
   - clusters/status
+  - machines
+  - machines/status
   verbs:
   - get
   - list
@@ -2810,109 +2889,12 @@ rules:
   - update
   - watch
 - apiGroups:
-  - cluster.x-k8s.io
-  resources:
-  - machines
-  - machines/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
   - gcpclusters
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
-  - gcpclusters/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
   - gcpmachines
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
-  - gcpmachines/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
   - gcpmanagedclusters
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
-  - gcpmanagedclusters/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
-  - gcpmanagedclusters/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
   - gcpmanagedcontrolplanes
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
-  - gcpmanagedcontrolplanes/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
-  - gcpmanagedcontrolplanes/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
   - gcpmanagedmachinepools
   verbs:
   - create
@@ -2925,16 +2907,22 @@ rules:
 - apiGroups:
   - infrastructure.cluster.x-k8s.io
   resources:
-  - gcpmanagedmachinepools/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - infrastructure.cluster.x-k8s.io
-  resources:
+  - gcpclusters/status
+  - gcpmachines/status
+  - gcpmanagedclusters/status
+  - gcpmanagedcontrolplanes/status
   - gcpmanagedmachinepools/status
   verbs:
   - get
   - patch
+  - update
+- apiGroups:
+  - infrastructure.cluster.x-k8s.io
+  resources:
+  - gcpmanagedclusters/finalizers
+  - gcpmanagedcontrolplanes/finalizers
+  - gcpmanagedmachinepools/finalizers
+  verbs:
   - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -3021,6 +3009,7 @@ spec:
         - --feature-gates=GKE=${EXP_CAPG_GKE:=false}
         - --diagnostics-address=${CAPG_DIAGNOSTICS_ADDRESS:=:8443}
         - --insecure-diagnostics=${CAPG_INSECURE_DIAGNOSTICS:=false}
+        - --sync-period=2m
         - --v=${CAPG_LOGLEVEL:=0}
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
