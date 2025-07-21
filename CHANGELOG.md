@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.6.1-0.3.3 (upcoming)
+## 1.6.1-0.3.2 (upcoming)
 
 * [PLT-1548] [GKE] Activar Workload Identity
 
