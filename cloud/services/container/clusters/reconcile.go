@@ -310,6 +310,13 @@ func (s *Service) createCluster(ctx context.Context, log *logr.Logger) error {
 		cluster.IpAllocationPolicy = infrav1exp.ConvertToSdkIPAllocationPolicy(s.scope.GCPManagedControlPlane.Spec.IPAllocationPolicy)
 	}
 
+	// Add support for Workload Identity
+	if s.scope.GCPManagedControlPlane.Spec.ClusterSecurity != nil && s.scope.GCPManagedControlPlane.Spec.ClusterSecurity.WorkloadIdentityConfig != nil {
+		cluster.WorkloadIdentityConfig = &containerpb.WorkloadIdentityConfig{
+			WorkloadPool: s.scope.GCPManagedControlPlane.Spec.ClusterSecurity.WorkloadIdentityConfig.WorkloadPool,
+		}
+	}
+
 	// If the cluster is autopilot, we don't need to specify node pools.
 	if !s.scope.IsAutopilotCluster() {
 		cluster.NodePools = scope.ConvertToSdkNodePools(nodePools, machinePools, isRegional, cluster.Name)
@@ -478,6 +485,21 @@ func (s *Service) checkDiffAndPrepareUpdate(existingCluster *containerpb.Cluster
 		log.V(4).Info("Master authorized networks config update check", "desired", desiredMasterAuthorizedNetworksConfig)
 	}
 
+	// WorkloadIdentityConfig
+	desiredWorkloadIdentityConfig := &containerpb.WorkloadIdentityConfig{}
+	if s.scope.GCPManagedControlPlane.Spec.ClusterSecurity != nil &&
+		s.scope.GCPManagedControlPlane.Spec.ClusterSecurity.WorkloadIdentityConfig != nil {
+		desiredWorkloadIdentityConfig = &containerpb.WorkloadIdentityConfig{
+			WorkloadPool: s.scope.GCPManagedControlPlane.Spec.ClusterSecurity.WorkloadIdentityConfig.WorkloadPool,
+		}
+	}
+	if !compareWorkloadIdentityConfig(desiredWorkloadIdentityConfig, existingCluster.WorkloadIdentityConfig) {
+		needUpdate = true
+		clusterUpdate.DesiredWorkloadIdentityConfig = desiredWorkloadIdentityConfig
+		log.V(2).Info("WorkloadIdentityConfig update required", "current", existingCluster.WorkloadIdentityConfig,
+			"desired", desiredWorkloadIdentityConfig)
+	}
+
 	updateClusterRequest := containerpb.UpdateClusterRequest{
 		Name:   s.scope.ClusterFullName(),
 		Update: &clusterUpdate,
@@ -512,4 +534,21 @@ func compareMasterAuthorizedNetworksConfig(a, b *containerpb.MasterAuthorizedNet
 		return false
 	}
 	return true
+}
+
+// compareWorkloadIdentityConfig compares if two WorkloadIdentityConfig are equal.
+func compareWorkloadIdentityConfig(a, b *containerpb.WorkloadIdentityConfig) bool {
+	if a == nil && b == nil {
+		return true
+	}
+
+	if a == nil {
+		a = &containerpb.WorkloadIdentityConfig{}
+	}
+
+	if b == nil {
+		b = &containerpb.WorkloadIdentityConfig{}
+	}
+
+	return cmp.Equal(a, b, cmpopts.IgnoreUnexported(containerpb.WorkloadIdentityConfig{}))
 }
