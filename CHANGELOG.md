@@ -1,16 +1,15 @@
 # Changelog
 
-## 1.6.1-0.5.0 (upcoming)
+## 1.6.1-0.4.0 (upcoming)
 
-* Pending changelog
-
-## Previous development
-
-### Branched to branch-1.6.1-0.4 (2025-07-22)
-
+* [PLT-2635] Fix golang vulnerabilities to max provider version 1.24.6
 * [PLT-1548] [GKE] Activar Workload Identity
 
+## 1.6.1-0.3.1 (2025-02-26)
 
+* [PLT-1496] Use extended release channel in GKE by default
+
+## Previous development
 
 ### Branched to branch-1.6.1-0.3 (2024-12-09)
 
