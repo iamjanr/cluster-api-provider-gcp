@@ -8,6 +8,7 @@
 
 ### Branched to branch-1.6.1-0.4 (2025-07-22)
 
+* [PLT-2635] Fix golang vulnerabilities to max provider version 1.24.6
 * [PLT-1548] [GKE] Activar Workload Identity
 
 
